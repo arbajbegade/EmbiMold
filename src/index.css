@@ -1,0 +1,4 @@
+@import "tailwindcss";
+.Cbutton {
+  @apply bg-[#3D3A89] text-white px-4 py-2 rounded-md transition duration-200 shadow hover:bg-[#2e2c6a] hover:shadow-md;
+}
