@@ -1,10 +1,10 @@
 const Auth = {
   removeSession: () => {
-    localStorage.clear();
+    sessionStorage.clear();
   },
 
   getLoggedInUser: () => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (!token) return null;
 
     try {

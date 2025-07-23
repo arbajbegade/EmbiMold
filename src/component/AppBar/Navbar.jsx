@@ -3,6 +3,7 @@ import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, Badge } from "
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import { resetSessionStorageAndRedirect } from "../../services/apiFetch";
 
 const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -19,10 +20,6 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleLogout = () => {
-    console.log("Logging out...");
   };
 
   const toggleSidebar = () => {
@@ -108,7 +105,7 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
           onClose={handleClose}
         >
           <MenuItem onClick={handleClose}>Profile</MenuItem>
-          <MenuItem onClick={handleLogout}>Log Out</MenuItem>
+          <MenuItem onClick={resetSessionStorageAndRedirect}>Log Out</MenuItem>
         </Menu>
       </Toolbar>
     </AppBar>
