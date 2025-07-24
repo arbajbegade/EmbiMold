@@ -1,123 +1,89 @@
 import { useNavigate } from 'react-router-dom';
 import Chart from 'react-apexcharts';
 
-const DashBoardDetails = () => {
+const DashBoardDetails = ({ allDetails }) => {
   const navigate = useNavigate();
-
-   const machines = [
-    {
-      id: 1,
-      name: "Machine 1",
-      qunatity: 150,
-      process: "Molding",
-      status: "Running",
-      shiftTimings: [20, 35, 50]
-    },
-    {
-      id: 2,
-      name: "Machine 1",
-      qunatity: 300,
-      process: "Molding",
-      status: "Running",
-      shiftTimings: [50, 40, 60]
-    },
-    {
-      id: 3,
-      name: "Machine 1",
-      qunatity: 150,
-      process: "Molding",
-      status: "Running",
-      shiftTimings: [30, 30, 30]
-    },
-    {
-      id: 4,
-      name: "Machine 1",
-      qunatity: 250,
-      process: "Molding",
-      status: "Running",
-      shiftTimings: [60, 70, 50]
-    },
-    {
-      id: 5,
-      name: "Machine 1",
-      qunatity: 90,
-      process: "Molding",
-      status: "Running",
-      shiftTimings: [25, 40, 30]
-    },
-    {
-      id: 6,
-      name: "Machine 1",
-      qunatity: 200,
-      process: "Molding",
-      status: "Running",
-      shiftTimings: [45, 55, 70]
-    },
-  ];
 
   const handleCardClick = (machineId) => {
     navigate(`/details/${machineId}`)
   };
-
-  const getProgressColor = (qty) => {
-    if (qty < 100) return 'bg-green-500';
-    if (qty <= 200) return 'bg-red-500';
-    return 'bg-white border border-gray-300';
+  const getStatusColor = (status) => {
+    switch (status?.toLowerCase()) {
+      case "running":
+        return "bg-green-700";
+      case "offline":
+        return "bg-red-700";
+      case "idle":
+        return "bg-yellow-500";
+      case "error":
+        return "bg-orange-600";
+      case "maintenance":
+        return "bg-blue-700";
+      default:
+        return "bg-gray-500"; // fallback color
+    }
   };
+  const renderProgressBar = (target, actual, rejected) => {
+    const total = Number(target);
+    const actualPercent = Math.min((actual / total) * 100, 100);
+    const rejectedPercent = Math.min((rejected / total) * 100, 100);
+    const remainingPercent = Math.max(100 - actualPercent - rejectedPercent, 0);
+
+    return (
+      <div className="w-full space-y-1">
+        {/* Labels above the bar */}
+        <div className="w-full flex text-xs text-gray-700 font-medium">
+          <div className="text-left" style={{ width: `${rejectedPercent}%` }}>
+            {`${rejected}`}
+          </div>
+          <div className="text-right w-full">
+            {`${target}`}
+          </div>
+        </div>
+        {/* Progress bar */}
+        <div className="w-full h-3 rounded flex overflow-hidden shadow-inner">
+          <div className="bg-[#EF4444] h-full" style={{ width: `${rejectedPercent}%` }} />
+          <div className="bg-[#3B82F6] h-full" style={{ width: `${actualPercent}%` }} />
+          <div className="bg-[#D1D5DB] h-full" style={{ width: `${remainingPercent}%` }} />
+        </div>
+
+        {/* Labels below the bar */}
+        <div className="w-full flex text-xs text-gray-700 font-medium">
+          <div className="text-center" style={{ width: `${actualPercent}%` }}>
+            {`${actual}`}
+          </div>
+        </div>
+
+      </div>
+    );
+  };
+
+
 
   return (
     <div className="font-bold text-xl">
       <div className="flex flex-wrap justify-center gap-6">
-        {machines.map((machine) => (
-          <div
-            key={machine.id}
-            onClick={() => handleCardClick(machine.id)}
-            className="text-white rounded-xl shadow-lg w-64 cursor-pointer hover:scale-105 hover:shadow-xl transition-transform duration-200"
-          >
-            <div className="bg-red-700 py-2 rounded-t-xl text-center">
-              {machine.name}
-            </div>
-            <div className="bg-gray-200 text-black p-4 rounded-b-xl text-sm space-y-3">
-              {/* Progress Bar */}
-              <div className="space-y-1">
-                <div className="font-semibold text-center">Status: {machine.status}</div>
-                <div className="w-full bg-gray-300 h-3 rounded">
-                  <div
-                    className={`h-3 rounded ${getProgressColor(machine.qunatity)}`}
-                    style={{ width: `${Math.min(machine.qunatity / 3, 100)}%` }}
-                  ></div>
-                </div>
-                <div className="text-center text-xs font-medium">Quantity: {machine.qunatity}</div>
-              </div>
+        {allDetails.map((data, index) => {
+          const statusColor = getStatusColor(data["status"]);
 
-              {/* Shift Timing Bar Chart */}
-              <div>
-                <Chart
-                  type="bar"
-                  height={150}
-                  series={[{ name: 'Shift Output', data: machine.shiftTimings }]}
-                  options={{
-                    chart: {
-                      toolbar: { show: false },
-                      animations: { enabled: true }
-                    },
-                    xaxis: {
-                      categories: ['Shift 1', 'Shift 2', 'Shift 3'],
-                      labels: { style: { fontSize: '10px' } }
-                    },
-                    yaxis: {
-                      labels: { style: { fontSize: '10px' } }
-                    },
-                    plotOptions: {
-                      bar: { borderRadius: 4, columnWidth: '50%' }
-                    },
-                    colors: ['#3182CE']
-                  }}
-                />
+          return (
+            <div key={index} onClick={() => handleCardClick(data["machine name"])} className="text-white rounded-xl shadow-lg w-64 cursor-pointer hover:scale-105 hover:shadow-xl transition-transform duration-200">
+              <div className={`${statusColor} py-2 rounded-t-xl text-center`}>
+                {data["machine name"] || "Unknown"}
+              </div>
+              <div className='bg-gray-100'>
+                <div className="text-black p-4 rounded-b-xl text-sm space-y-3">
+                  <p>PS Number: {data["ps number"]}</p>
+                  <div className='p-2'>
+                    {renderProgressBar(data.target, data.actual, data.rejected)}
+                  </div>
+                  <p>Machine Status: {data.status}</p>
+                  <p>Connection Status: {data["connection status"]}</p>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
