@@ -6,7 +6,6 @@ import DetailsTable from './table';
 
 const MoldDetails = () => {
   const { id } = useParams();
-  const [mqttData, setMqttData] = useState({});
   const [prodHistory, setProdHistory] = useState({});
   const [rejectionHistory, setRejectionHistory] = useState({});
   const [allDetails, setAllDetails] = useState([]);
@@ -25,39 +24,38 @@ const MoldDetails = () => {
     const handleMessage = (incomingTopic, message) => {
       try {
         const payload = JSON.parse(message.toString());
+        console.log(incomingTopic, payload)
         const parts = incomingTopic.split("/");
-        if (parts.length < 6) return;
+        
+      const topicParts = incomingTopic.split("/");
+        if (topicParts.length < 5) return;
 
-        const machineName = parts[4]; // e.g., M-50
-        const mainKey = parts[5];     // e.g., oee, connection, electricity, machine, mold, plan
-        const subKey = parts[6] || null; // e.g., actual/rejected/target for plan, otherwise null
+      const mainKey = topicParts[4];        // e.g. "plan", "OEE", "mold"
+      const subKey = topicParts[5];         // e.g. "target", "availability" (optional)
 
-        setAllDetails((prevDetails) => {
-          const machineData = { ...prevDetails[machineName] };
+      setAllDetails((prevDetails) => {
+        const updated = { ...prevDetails };
 
-          if (mainKey === "plan" && subKey) {
-            machineData.plan = {
-              ...machineData.plan,
-              [subKey]: payload,
-            };
-          } else {
-            machineData[mainKey] = payload;
-          }
+        if (!updated[mainKey]) {
+          updated[mainKey] = {};
+        }
 
-          return {
-            ...prevDetails,
-            [machineName]: machineData,
-          };
-        });
+        if (subKey) {
+          // If subKey exists, assign payload to that subKey
+          updated[mainKey][subKey] = payload;
+        } else {
+          // No subKey, directly assign the payload to mainKey
+          updated[mainKey] = payload;
+        }
+
+        return updated;
+      });
 
         if (incomingTopic.endsWith('/plan/prod_history')) {
           setProdHistory(payload);
         } else if (incomingTopic.endsWith('/plan/rejection_history')) {
           setRejectionHistory(payload);
-        } else if (typeof payload === 'object' && payload !== null) {
-          setMqttData(prev => ({ ...prev, ...payload }));
-        }
-
+        } 
       } catch (error) {
         console.error("❌ Failed to parse MQTT message:", error);
       }
@@ -72,7 +70,7 @@ const MoldDetails = () => {
       mqttClient.removeListener("message", handleMessage);
     };
   }, [id]);
-  
+  console.log('allDetails',allDetails)
   return (
     <div className="my-2 w-full h-full p-4 bg-white rounded-md shadow-lg">
       <h2 className="text-lg font-bold mb-4">Machine Name: {id}</h2>
