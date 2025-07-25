@@ -1,6 +1,6 @@
 import { Route } from "react-router-dom";
 import Dashboard from "./list";
-import MoldDetails from "./MoldDetails";
+import MoldDetails from "./details/MoldDetails";
 
 const DashboardRoutes = (
     <>
