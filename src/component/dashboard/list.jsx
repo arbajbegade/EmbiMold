@@ -4,8 +4,9 @@ import secureApiFetch from "../../services/apiFetch";
 import DashBoardDetails from "./details";
 
 const Dashboard = () => {
-  const [machineNames, setMachineNames] = useState([]);
   const [allDetails, setAllDetails] = useState([]);
+  const [prodHistory, setProdHistory] = useState({});
+  const [rejectionHistory, setRejectionHistory] = useState({});
 
   // Initialize all machines with default values
   useEffect(() => {
@@ -18,8 +19,6 @@ const Dashboard = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        setMachineNames(data);
-
         const initialDetails = data.map((machine) => ({
           "machine name": machine.machine_name,
           "status": "offline",
@@ -30,6 +29,8 @@ const Dashboard = () => {
           "shift start": "",
           "shift end": "",
           "connection status": "offline",
+          "prod_history": {},
+          "rejection_history": {}
         }));
 
         setAllDetails(initialDetails);
@@ -79,7 +80,18 @@ const Dashboard = () => {
             updatedMachine["status"] = payload.status || "online";
             updatedMachine["connection status"] = "online";
           }
-
+          if (dataType === "prod_history") {
+            updatedMachine["prod_history"] = {
+              ...(updatedMachine["prod_history"] || {}),
+              ...payload,
+            };
+          }
+          if (dataType === "rejection_history") {
+            updatedMachine["rejection_history"] = {
+              ...(updatedMachine["rejection_history"] || {}),
+              ...payload,
+            };
+          }
           // Create a new array with updated machine
           const updatedArray = [...prevDetails];
           updatedArray[index] = updatedMachine;
@@ -99,10 +111,9 @@ const Dashboard = () => {
       mqttClient.removeListener("message", handleMessage);
     };
   }, []);
-
   return (
     <div className="my-2 pt-4 w-full h-full p-2 bg-white rounded-md shadow-lg">
-      <DashBoardDetails machineNames={machineNames} allDetails={allDetails} />
+      <DashBoardDetails allDetails={allDetails} />
     </div>
   );
 };
