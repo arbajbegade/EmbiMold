@@ -8,7 +8,6 @@ import Login from "./login/Login";
 import theme from "./theme";
 import DashboardRoutes from "./component/dashboard/route"
 import PlanRoutes from "./component/prod plan/route";
-import MoldROutes from "./component/mold/route";
 import Droutes from "./component/department/route";
 import MachineRoute from "./component/machine/route";
 import TypeRoute from "./component/type/route";
@@ -23,7 +22,6 @@ export default function App() {
           <Route path="/" element={<Index />} >
             {DashboardRoutes}
             {PlanRoutes}
-            {MoldROutes}
             {Droutes}
             {MachineRoute}
             {TypeRoute}
