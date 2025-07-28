@@ -4,7 +4,7 @@ import DashboardChart from "./DashboardChart";
 
 const DashBoardDetails = ({ allDetails }) => {
   const navigate = useNavigate();
-
+console.log('allDetails',allDetails)
   const handleCardClick = (machineId) => {
     navigate(`/details/${machineId}`);
   };
@@ -46,9 +46,10 @@ const DashBoardDetails = ({ allDetails }) => {
                   <p>PS Number: {data["ps number"]}</p>
                   <div className="p-2">
                     <RenderProgressBar target={data.target} actual={data.actual} rejected={data.rejected} />
+                    <RenderProgressBar target={data.shift_target} actual={data.shift_actual} rejected={data.shift_rejected} />
                   </div>
                   <p>Machine Status: {data.status}</p>
-                  <p>Connection Status: {data["connection status"]}</p>
+                  <p>Connection Status: {data.connection_status}</p>
                 </div>
 
                 {/* Bar Chart */}

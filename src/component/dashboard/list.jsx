@@ -5,8 +5,6 @@ import DashBoardDetails from "./details";
 
 const Dashboard = () => {
   const [allDetails, setAllDetails] = useState([]);
-  const [prodHistory, setProdHistory] = useState({});
-  const [rejectionHistory, setRejectionHistory] = useState({});
 
   // Initialize all machines with default values
   useEffect(() => {
@@ -26,9 +24,12 @@ const Dashboard = () => {
           "target": 0,
           "actual": 0,
           "rejected": 0,
-          "shift start": "",
-          "shift end": "",
-          "connection status": "offline",
+          "shift_target": 0,
+          "shift_actual": 0,
+          "shift_rejected": 0,
+          "shift_start": "",
+          "shift_end": "",
+          "connection_status": 0,
           "prod_history": {},
           "rejection_history": {}
         }));
@@ -57,36 +58,42 @@ const Dashboard = () => {
         const payload = JSON.parse(message.toString());
         const topicParts = incomingTopic.split("/");
         const machineName = topicParts[3];
-        const dataType = topicParts[5]; // e.g., "target", "actual", "rejected"
         setAllDetails((prevDetails) => {
           const index = prevDetails.findIndex(
             (machine) => machine["machine name"] === machineName
           );
           if (index === -1) return prevDetails;
-
           const updatedMachine = { ...prevDetails[index] };
 
-          if (dataType === "target") {
-            updatedMachine["target"] = payload.target || 0;
+          if (topicParts[4] === "mold") {
             updatedMachine["ps number"] = payload.ps_no || "";
-            updatedMachine["connection status"] = "online";
-          } else if (dataType === "actual") {
-            updatedMachine["actual"] = payload.actual || 0;
-            updatedMachine["connection status"] = "online";
-          } else if (dataType === "rejected") {
-            updatedMachine["rejected"] = payload.rejected || 0;
-            updatedMachine["connection status"] = "online";
-          } else if (topicParts[4] === "status") {
-            updatedMachine["status"] = payload.status || "online";
-            updatedMachine["connection status"] = "online";
           }
-          if (dataType === "prod_history") {
+          if (topicParts[4] === "status") {
+            updatedMachine["status"] = payload.status || "offline";
+          }
+          if (topicParts[4] === "connection" && topicParts[5] === 'status') {
+            updatedMachine["connection_status"] = payload.connected || 0;
+          }
+          if (topicParts[5] === "target") {
+            updatedMachine["shift_target"] = payload.shift_target || 0;
+            updatedMachine["target"] = payload.plan_target || 0;
+          }
+          if (topicParts[5] === "actual") {
+            updatedMachine["shift_actual"] = payload.shift_actual || 0;
+            updatedMachine["actual"] = payload.plan_actual || 0;
+          }
+          if (topicParts[5] === "rejected") {
+            updatedMachine["shift_rejected"] = payload.shift_rejected || 0;
+            updatedMachine["rejected"] = payload.plan_rejected || 0;
+          }
+
+          if (topicParts[5] === "prod_history") {
             updatedMachine["prod_history"] = {
               ...(updatedMachine["prod_history"] || {}),
               ...payload,
             };
           }
-          if (dataType === "rejection_history") {
+          if (topicParts[5] === "rejection_history") {
             updatedMachine["rejection_history"] = {
               ...(updatedMachine["rejection_history"] || {}),
               ...payload,
