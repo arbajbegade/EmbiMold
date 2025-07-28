@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import Chart from "react-apexcharts";
 import RenderProgressBar from "../ui/RenderProgressBar";
 import DashboardChart from "./DashboardChart";
 
