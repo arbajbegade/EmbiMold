@@ -5,9 +5,9 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import PersonIcon from '@mui/icons-material/Person';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import InboxIcon from '@mui/icons-material/Inbox';
+import OtherHousesIcon from '@mui/icons-material/OtherHouses';
+import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
+import MergeTypeIcon from '@mui/icons-material/MergeType';
 
 function SidebarMenu({ isSidebarOpen }) {
     return (
@@ -17,9 +17,9 @@ function SidebarMenu({ isSidebarOpen }) {
                 <NavItem to="/productionplan" icon={<BarChartIcon />} text="Production Plan" />
 
                 <DropdownNavItem text="Setting" icon={<SettingsIcon />}>
-                    <NavItem to="/setting/user" icon={<PersonIcon />} text="Users" />
-                    <NavItem to="/setting/roles" icon={<AdminPanelSettingsIcon />} text="Roles" />
-                    <NavItem to="/setting/mold" icon={<InboxIcon />} text="Mold" />
+                    <NavItem to="/setting/department" icon={<OtherHousesIcon />} text="Departments" />
+                    <NavItem to="/setting/machine" icon={<LaptopChromebookIcon />} text="Machines" />
+                    <NavItem to="/setting/type" icon={<MergeTypeIcon />} text="Types" />
                 </DropdownNavItem>
             </ul>
         </div>

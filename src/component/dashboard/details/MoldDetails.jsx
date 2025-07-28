@@ -24,38 +24,36 @@ const MoldDetails = () => {
     const handleMessage = (incomingTopic, message) => {
       try {
         const payload = JSON.parse(message.toString());
-        console.log(incomingTopic, payload)
-        const parts = incomingTopic.split("/");
-        
-      const topicParts = incomingTopic.split("/");
+
+        const topicParts = incomingTopic.split("/");
         if (topicParts.length < 5) return;
 
-      const mainKey = topicParts[4];        // e.g. "plan", "OEE", "mold"
-      const subKey = topicParts[5];         // e.g. "target", "availability" (optional)
+        const mainKey = topicParts[4];        // e.g. "plan", "OEE", "mold"
+        const subKey = topicParts[5];         // e.g. "target", "availability" (optional)
 
-      setAllDetails((prevDetails) => {
-        const updated = { ...prevDetails };
+        setAllDetails((prevDetails) => {
+          const updated = { ...prevDetails };
 
-        if (!updated[mainKey]) {
-          updated[mainKey] = {};
-        }
+          if (!updated[mainKey]) {
+            updated[mainKey] = {};
+          }
 
-        if (subKey) {
-          // If subKey exists, assign payload to that subKey
-          updated[mainKey][subKey] = payload;
-        } else {
-          // No subKey, directly assign the payload to mainKey
-          updated[mainKey] = payload;
-        }
+          if (subKey) {
+            // If subKey exists, assign payload to that subKey
+            updated[mainKey][subKey] = payload;
+          } else {
+            // No subKey, directly assign the payload to mainKey
+            updated[mainKey] = payload;
+          }
 
-        return updated;
-      });
+          return updated;
+        });
 
         if (incomingTopic.endsWith('/plan/prod_history')) {
           setProdHistory(payload);
         } else if (incomingTopic.endsWith('/plan/rejection_history')) {
           setRejectionHistory(payload);
-        } 
+        }
       } catch (error) {
         console.error("❌ Failed to parse MQTT message:", error);
       }
@@ -70,11 +68,10 @@ const MoldDetails = () => {
       mqttClient.removeListener("message", handleMessage);
     };
   }, [id]);
-  console.log('allDetails',allDetails)
   return (
     <div className="my-2 w-full h-full p-4 bg-white rounded-md shadow-lg">
       <h2 className="text-lg font-bold mb-4">Machine Name: {id}</h2>
-        <DetailsTable data={allDetails} />
+      <DetailsTable data={allDetails} />
       <DataChart rejectionHistory={rejectionHistory} prodHistory={prodHistory} />
 
     </div>

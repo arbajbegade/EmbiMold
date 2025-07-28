@@ -6,10 +6,12 @@ import Index from "./component/AppBar/Index";
 import PageNotFound from "./login/PageNotFound";
 import Login from "./login/Login";
 import theme from "./theme";
-import Dashboard from "./component/dashboard/list";
 import DashboardRoutes from "./component/dashboard/route"
 import PlanRoutes from "./component/prod plan/route";
 import MoldROutes from "./component/mold/route";
+import Droutes from "./component/department/route";
+import MachineRoute from "./component/machine/route";
+import TypeRoute from "./component/type/route";
 
 export default function App() {
   return (
@@ -21,6 +23,9 @@ export default function App() {
             {DashboardRoutes}
             {PlanRoutes}
             {MoldROutes}
+            {Droutes}
+            {MachineRoute}
+            {TypeRoute}
             <Route path="*" element={<PageNotFound />} />
           </Route>
 
