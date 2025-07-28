@@ -8,6 +8,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import OtherHousesIcon from '@mui/icons-material/OtherHouses';
 import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
 import MergeTypeIcon from '@mui/icons-material/MergeType';
+import UpdateIcon from '@mui/icons-material/Update';
 
 function SidebarMenu({ isSidebarOpen }) {
     return (
@@ -17,9 +18,10 @@ function SidebarMenu({ isSidebarOpen }) {
                 <NavItem to="/productionplan" icon={<BarChartIcon />} text="Production Plan" />
 
                 <DropdownNavItem text="Setting" icon={<SettingsIcon />}>
+                    <NavItem to="/setting/type" icon={<MergeTypeIcon />} text="Types" />
                     <NavItem to="/setting/department" icon={<OtherHousesIcon />} text="Departments" />
                     <NavItem to="/setting/machine" icon={<LaptopChromebookIcon />} text="Machines" />
-                    <NavItem to="/setting/type" icon={<MergeTypeIcon />} text="Types" />
+                    <NavItem to="/setting/shift" icon={<UpdateIcon />} text="Shift" />
                 </DropdownNavItem>
             </ul>
         </div>

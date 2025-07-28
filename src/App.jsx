@@ -12,6 +12,7 @@ import MoldROutes from "./component/mold/route";
 import Droutes from "./component/department/route";
 import MachineRoute from "./component/machine/route";
 import TypeRoute from "./component/type/route";
+import ShiftRoute from "./component/shift/route";
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
             {Droutes}
             {MachineRoute}
             {TypeRoute}
+            {ShiftRoute}
             <Route path="*" element={<PageNotFound />} />
           </Route>
 
