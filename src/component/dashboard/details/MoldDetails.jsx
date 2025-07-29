@@ -24,7 +24,6 @@ const MoldDetails = () => {
     const handleMessage = (incomingTopic, message) => {
       try {
         const payload = JSON.parse(message.toString());
-
         const topicParts = incomingTopic.split("/");
         if (topicParts.length < 5) return;
 
@@ -49,9 +48,9 @@ const MoldDetails = () => {
           return updated;
         });
 
-        if (incomingTopic.endsWith('/plan/prod_history')) {
+        if (incomingTopic.endsWith('/production/prod_history')) {
           setProdHistory(payload);
-        } else if (incomingTopic.endsWith('/plan/rejection_history')) {
+        } else if (incomingTopic.endsWith('/production/rejection_history')) {
           setRejectionHistory(payload);
         }
       } catch (error) {
