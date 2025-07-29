@@ -17,7 +17,7 @@ const DashboardChart = ({ prodHistory, rejectionHistory }) => {
     const chartOptions = {
         chart: {
             type: 'bar',
-            height: 200,
+            height: 170,
             stacked: true, // Now it's NOT stacked
             toolbar: { show: false },
         },
@@ -28,7 +28,7 @@ const DashboardChart = ({ prodHistory, rejectionHistory }) => {
         plotOptions: {
             bar: {
                 horizontal: false,
-                columnWidth: '30%',
+                columnWidth: '25%',
                 endingShape: 'rounded'
             },
         },
@@ -58,7 +58,7 @@ const DashboardChart = ({ prodHistory, rejectionHistory }) => {
 
     return (
         <div>
-            <Chart options={chartOptions} series={chartSeries} type="bar" height={150} />
+            <Chart options={chartOptions} series={chartSeries} type="bar" height={140} />
         </div>
     );
 };

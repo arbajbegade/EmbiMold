@@ -3,12 +3,18 @@ import { useParams } from 'react-router-dom';
 import mqttClient from '../../../services/mqttClient';
 import DataChart from './chart';
 import DetailsTable from './table';
+import EditIcon from '@mui/icons-material/Edit';
+import { Dialog, DialogTitle, DialogContent } from '@mui/material';
+import MachinePlanEdit from './edit';
 
 const MoldDetails = () => {
   const { id } = useParams();
   const [prodHistory, setProdHistory] = useState({});
   const [rejectionHistory, setRejectionHistory] = useState({});
   const [allDetails, setAllDetails] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
+  const handleDialogOpen = () => setOpenDialog(true);
+  const handleDialogClose = () => setOpenDialog(false);
 
   useEffect(() => {
     const topic = `premierseals/chinchwad/molding/${id}/#`;
@@ -69,10 +75,19 @@ const MoldDetails = () => {
   }, [id]);
   return (
     <div className="my-2 w-full h-full p-4 bg-white rounded-md shadow-lg">
-      <h2 className="text-lg font-bold mb-4">Machine Name: {id}</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-bold mb-4">Machine Name: {id}</h2>
+        <button className='Cbutton' onClick={handleDialogOpen}> <EditIcon /> Edit</button>
+      </div>
       <DetailsTable data={allDetails} />
       <DataChart rejectionHistory={rejectionHistory} prodHistory={prodHistory} />
 
+      <Dialog open={openDialog} onClose={handleDialogClose} fullWidth maxWidth="sm">
+        <DialogTitle>Edit Machine Details</DialogTitle>
+        <DialogContent>
+          <MachinePlanEdit data={allDetails} id={id}/>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

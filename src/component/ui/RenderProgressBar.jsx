@@ -8,7 +8,7 @@ const RenderProgressBar = ({target, actual, rejected}) => {
 
     return (
       <div className="w-full space-y-1">
-        <div className="w-full flex text-xs text-gray-700 font-medium">
+        <div className="w-full flex text-xs  font-medium">
           <div className="text-left" style={{ width: `${rejectedPercent}%` }}>
             {`${rejected}`}
           </div>
@@ -17,9 +17,9 @@ const RenderProgressBar = ({target, actual, rejected}) => {
         <div className="w-full h-3 rounded flex overflow-hidden shadow-inner">
           <div className="bg-[#EF4444] h-full" style={{ width: `${rejectedPercent}%` }} />
           <div className="bg-[#3B82F6] h-full" style={{ width: `${actualPercent}%` }} />
-          <div className="bg-[#D1D5DB] h-full" style={{ width: `${remainingPercent}%` }} />
+          <div className="bg-[#ffff] h-full" style={{ width: `${remainingPercent}%` }} />
         </div>
-        <div className="w-full flex text-xs text-gray-700 font-medium">
+        <div className="w-full flex text-xs font-medium">
           <div className="text-center" style={{ width: `${actualPercent}%` }}>
             {`${actual}`}
           </div>

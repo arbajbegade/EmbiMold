@@ -4,7 +4,7 @@ const DetailsTable = ({ data }) => {
   if (!data || Object.keys(data).length === 0) return <p>No data available</p>;
   const dataList = [
     { name: "Ps No", quantity: data.mold?.ps_no, process: "cavity", time: data.mold?.cavities },
-    { name: "Loading Time", quantity: data.mold?.loading_time, process: "Running cavity", time: data.mold?.working_cavities },
+    { name: "Loading Time", quantity: data.mold?.loading_time, process: "Working cavity", time: data.mold?.working_cavities },
     { name: "Cycle Time", quantity: data.mold?.cycle_time, process: "Mold Temprature", time: data.mold?.mold_temperature },
     { name: "Electricity", quantity: data.electricity?.status?.status, process: "Month Target", time: data.production?.target?.plan_target },
     { name: "Shift Target", quantity: data.production?.target?.shift_target, process: "Month Actual", time: data.production?.actual?.plan_actual },
