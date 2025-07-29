@@ -9,6 +9,8 @@ import OtherHousesIcon from '@mui/icons-material/OtherHouses';
 import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
 import MergeTypeIcon from '@mui/icons-material/MergeType';
 import UpdateIcon from '@mui/icons-material/Update';
+import SegmentIcon from '@mui/icons-material/Segment';
+import AspectRatioIcon from '@mui/icons-material/AspectRatio';
 
 function SidebarMenu({ isSidebarOpen }) {
     return (
@@ -17,6 +19,9 @@ function SidebarMenu({ isSidebarOpen }) {
                 <NavItem to="/" icon={<DashboardIcon />} text="Dashboard" />
                 <NavItem to="/productionplan" icon={<BarChartIcon />} text="Production Plan" />
 
+                <DropdownNavItem text="Parts" icon={<SegmentIcon />}>
+                    <NavItem to="/parts/mold" icon={<AspectRatioIcon />} text="Mold" />
+                </DropdownNavItem>
                 <DropdownNavItem text="Setting" icon={<SettingsIcon />}>
                     <NavItem to="/setting/type" icon={<MergeTypeIcon />} text="Types" />
                     <NavItem to="/setting/department" icon={<OtherHousesIcon />} text="Departments" />

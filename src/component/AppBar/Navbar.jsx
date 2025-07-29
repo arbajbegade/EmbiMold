@@ -51,7 +51,7 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
           component="div"
           sx={{ flexGrow: 1, color: "#1d0d4b", fontWeight: "bold" }}
         >
-          EmbiProd
+          EmbiMold
         </Typography>
 
         {/* Notifications Icon */}

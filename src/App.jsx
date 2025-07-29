@@ -12,6 +12,7 @@ import Droutes from "./component/department/route";
 import MachineRoute from "./component/machine/route";
 import TypeRoute from "./component/type/route";
 import ShiftRoute from "./component/shift/route";
+import MoldRoute from "./component/mold/route";
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/" element={<Index />} >
             {DashboardRoutes}
             {PlanRoutes}
+            {MoldRoute}
             {Droutes}
             {MachineRoute}
             {TypeRoute}
