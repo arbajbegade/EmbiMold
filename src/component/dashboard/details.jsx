@@ -4,7 +4,6 @@ import DashboardChart from "./DashboardChart";
 
 const DashBoardDetails = ({ allDetails }) => {
   const navigate = useNavigate();
-  console.log('allDetails', allDetails)
   const handleCardClick = (machineId) => {
     navigate(`/details/${machineId}`);
   };

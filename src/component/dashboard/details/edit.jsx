@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import secureApiFetch from '../../../services/apiFetch';
 
 const MachinePlanEdit = ({ data,id }) => {
-    console.log('data', data)
     const today = new Date().toISOString().split("T")[0];
     const [posDetail, setPosDetail] = useState([]);
 
@@ -10,7 +9,7 @@ const MachinePlanEdit = ({ data,id }) => {
         date: '',
         psNumber: '',
         target: 0,
-        machine: id,
+        machine: '',
         planType: ''
     });
 
@@ -23,8 +22,8 @@ const MachinePlanEdit = ({ data,id }) => {
                 date: formattedDate,
                 psNumber: data.mold?.ps_no || '',
                 target: data.production?.target?.plan_target || 0,
-                machine: '',
-                planType: ''
+                machine: id,
+                planType: data.production.plan[0].plan_type
             });
         }
     }, [data]);
