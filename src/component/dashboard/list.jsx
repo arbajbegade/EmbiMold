@@ -5,7 +5,7 @@ import DashBoardDetails from "./details";
 
 const Dashboard = () => {
   const [allDetails, setAllDetails] = useState([]);
-
+const [isMachinesLoaded, setIsMachinesLoaded] = useState(false);
   // Initialize all machines with default values
   useEffect(() => {
     secureApiFetch("/api/v1/machine-names", {
@@ -35,6 +35,7 @@ const Dashboard = () => {
         }));
 
         setAllDetails(initialDetails);
+        setIsMachinesLoaded(true);
       })
       .catch((error) => {
         console.error("Machine name fetch error:", error);
@@ -43,6 +44,7 @@ const Dashboard = () => {
 
   // Handle incoming MQTT messages
   useEffect(() => {
+     if (!isMachinesLoaded) return;
     const topic = `premierseals/#`;
 
     mqttClient.subscribe(topic, (err) => {
@@ -117,7 +119,7 @@ const Dashboard = () => {
       });
       mqttClient.removeListener("message", handleMessage);
     };
-  }, []);
+  }, [isMachinesLoaded]);
   return (
     <div className="my-2 pt-4 w-full h-full p-2 bg-white rounded-md shadow-lg">
       <DashBoardDetails allDetails={allDetails} />
