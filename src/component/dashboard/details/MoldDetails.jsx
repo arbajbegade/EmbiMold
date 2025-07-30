@@ -9,6 +9,7 @@ import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import BuildCircleIcon from '@mui/icons-material/BuildCircle';
 import EditIcon from '@mui/icons-material/Edit';
 import CavityEdit from './CavityEdit';
+import OeeData from './OeeData';
 
 
 const MoldDetails = () => {
@@ -46,10 +47,8 @@ const MoldDetails = () => {
             updated[mainKey] = {};
           }
           if (subKey) {
-            // If subKey exists, assign payload to that subKey
             updated[mainKey][subKey] = payload;
           } else {
-            // No subKey, directly assign the payload to mainKey
             updated[mainKey] = payload;
           }
           return updated;
@@ -74,12 +73,12 @@ const MoldDetails = () => {
       mqttClient.removeListener("message", handleMessage);
     };
   }, [id]);
-
   return (
     <div className="my-2 w-full h-full p-4 bg-white rounded-md shadow-lg">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-bold mb-4">Machine Name: {id}</h2>
         <div className='flex items-center gap-4'>
+          <OeeData data={allDetails.OEE} />
           <p className='flex'> Mold:  {moldStatus === 'OPEN' ? (
             <span className="text-yellow-600 flex items-center gap-1">
               <HourglassEmptyIcon fontSize="small" />
@@ -108,7 +107,7 @@ const MoldDetails = () => {
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogTitle>Edit Working Cavity</DialogTitle>
         <DialogContent>
-          <CavityEdit data={allDetails.mold} id={id} handleClose={handleClose}/>
+          <CavityEdit data={allDetails.mold} id={id} handleClose={handleClose} />
         </DialogContent>
       </Dialog>
     </div>
