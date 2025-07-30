@@ -78,7 +78,6 @@ const MoldDetails = () => {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-bold mb-4">Machine Name: {id}</h2>
         <div className='flex items-center gap-4'>
-          <OeeData data={allDetails.OEE} />
           <p className='flex'> Mold:  {moldStatus === 'OPEN' ? (
             <span className="text-yellow-600 flex items-center gap-1">
               <HourglassEmptyIcon fontSize="small" />
@@ -94,7 +93,15 @@ const MoldDetails = () => {
           <button className='Cbutton' onClick={handleDialogOpen}> <EditIcon /> Edit</button>
         </div>
       </div>
-      <DetailsTable data={allDetails} />
+      <div className="flex w-full justify-between gap-4">
+        <div className="w-1/2">
+          <DetailsTable data={allDetails} />
+        </div>
+        <div className="w-1/2">
+          <OeeData data={allDetails.OEE} />
+        </div>
+      </div>
+
       <DataChart rejectionHistory={rejectionHistory} prodHistory={prodHistory} />
 
       <Dialog open={openDialog} onClose={handleDialogClose} fullWidth maxWidth="sm">
