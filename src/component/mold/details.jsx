@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import MoldTable from './table';
+import secureApiFetch from '../../services/apiFetch';
 
 const MoldDetails = ({moldDetails}) => {
   const [formData, setFormData] = useState({
-    psNumber: '',
-    loadingTime: '',
-    cycleTime: '',
+    ps_no: '',
+    loading_time: '',
+    cycle_time: '',
     cavities: '',
-    workingCavities: '',
-    moldTemp: '',
+    no_of_working_cavities: '',
+    mold_temp: '',
   });
 
   const handleChange = (e) => {
@@ -17,12 +18,31 @@ const MoldDetails = ({moldDetails}) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log('Submitted Data:', formData);
-    toast.success('Mold Plan Submitted Successfully!');
-  };
+    try {
+      const response = await secureApiFetch("/api/v1/mold-details", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify(formData)
+      });
 
+      if (!response.ok) {
+        throw new Error("Failed to submit Mold Details");
+      }
+
+      const result = await response.json();
+      console.log("✅ Submitted Data:", result);
+      toast.success('Mold details Submitted Successfully!');
+    } catch (error) {
+      console.error("Submission error:", error);
+      toast.error("Something went wrong while submitting!");
+    }
+  };
+ 
   return (
     <div className="">
       <form onSubmit={handleSubmit}>
@@ -31,17 +51,17 @@ const MoldDetails = ({moldDetails}) => {
           <div className="md:col-span-3 space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">PS Number</label>
-              <input type="text" name="psNumber" value={formData.psNumber} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
+              <input type="text" name="ps_no" value={formData.ps_no} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Loading Time (sec)</label>
-              <input type="number" name="loadingTime" value={formData.loadingTime} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
+              <input type="number" name="loading_time" value={formData.loading_time} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Cycle Time (sec)</label>
-              <input type="number" name="cycleTime" value={formData.cycleTime} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
+              <input type="number" name="cycle_time" value={formData.cycle_time} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
             </div>
 
           </div>
@@ -54,11 +74,11 @@ const MoldDetails = ({moldDetails}) => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Working Cavities</label>
-              <input type="number" name="workingCavities" value={formData.workingCavities} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
+              <input type="number" name="no_of_working_cavities" value={formData.no_of_working_cavities} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Mold Temp (°C)</label>
-              <input type="number" name="moldTemp" value={formData.moldTemp} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
+              <input type="number" name="mold_temp" value={formData.mold_temp} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
             </div>
           </div>
         </div>
