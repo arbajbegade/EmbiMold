@@ -2,7 +2,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import MoldTable from './table';
 
-const MoldDetails = () => {
+const MoldDetails = ({moldDetails}) => {
   const [formData, setFormData] = useState({
     psNumber: '',
     loadingTime: '',
@@ -70,7 +70,7 @@ const MoldDetails = () => {
         </div>
       </form>
 
-      <MoldTable />
+      <MoldTable moldDetails={moldDetails}/>
     </div>
   );
 };

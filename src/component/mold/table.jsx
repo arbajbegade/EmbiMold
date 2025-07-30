@@ -1,27 +1,8 @@
 import React, { useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const MoldTable = () => {
+const MoldTable = ({moldDetails}) => {
   const [selectedId, setSelectedId] = useState(null);
-
-  const moldDetails = [
-    {
-      id: 1,
-      psNumber: "M-101",
-      loadingTIme: "3",
-      cycleTime: "2",
-      runnigCavity: 4,
-      moldTemp: "45",
-    },
-    {
-      id: 2,
-      psNumber: "M-102",
-      loadingTIme: "4",
-      cycleTime: "7",
-      runnigCavity: 2,
-      moldTemp: "52",
-    }
-  ];
 
   return (
     <div className="">
@@ -40,22 +21,22 @@ const MoldTable = () => {
             </tr>
           </thead>
           <tbody>
-            {moldDetails.map((item) => (
-              <tr key={item.id} className="text-center">
+            {moldDetails.map((item,index) => (
+              <tr key={index} className="text-center">
                 <td className="px-4 py-2 border">
                   <input
                     type="radio"
                     name="selectedRow"
-                    checked={selectedId === item.id}
-                    onChange={() => setSelectedId(item.id)}
+                    checked={selectedId === item.mold_id}
+                    onChange={() => setSelectedId(item.mold_id)}
                     className="form-radio text-blue-600 h-5 w-5 transition duration-150 ease-in-out cursor-pointer"
                   />
                 </td>
-                <td className="px-4 py-2 border">{item.psNumber}</td>
-                <td className="px-4 py-2 border">{item.loadingTIme}</td>
-                <td className="px-4 py-2 border">{item.cycleTime}</td>
-                <td className="px-4 py-2 border">{item.runnigCavity}</td>
-                <td className="px-4 py-2 border">{item.moldTemp}</td>
+                <td className="px-4 py-2 border">{item.ps_no}</td>
+                <td className="px-4 py-2 border">{item.loading_time}</td>
+                <td className="px-4 py-2 border">{item.cycle_time}</td>
+                <td className="px-4 py-2 border">{item.no_of_working_cavities}</td>
+                <td className="px-4 py-2 border">{item.mold_temp || 'temp'}</td>
                 <td className="px-4 py-2 border">
                   <button className="text-red-600 hover:text-red-700 cursor-pointer">
                     <DeleteIcon />

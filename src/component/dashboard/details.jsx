@@ -22,7 +22,6 @@ const DashBoardDetails = ({ allDetails }) => {
         return "bg-gray-500";
     }
   };
-
   return (
     <div className="font-bold text-xl">
       <div className="flex flex-wrap justify-center gap-6">
@@ -33,10 +32,9 @@ const DashBoardDetails = ({ allDetails }) => {
               <div className={`${statusColor} py-2 rounded-t-xl text-center`}>
                 {data["machine name"] || "Unknown"}
               </div>
-              <div className={`${data.status === 'running' ? 'bg-green-100' : 'bg-red-100'}`}>
+              <div className={`${data.status === 'Running' ? 'bg-green-100' : 'bg-red-100'}`}>
                 <div className="text-black px-1 rounded-b-xl text-sm text-center space-y-">
                   <p>PS Number: {data["ps number"]}</p>
-                  <p>Machine Status: {data.status}</p>
                   <div className="px-2">
                     <RenderProgressBar target={data.target} actual={data.actual} rejected={data.rejected} />
                     <RenderProgressBar target={data.shift_target} actual={data.shift_actual} rejected={data.shift_rejected} />
