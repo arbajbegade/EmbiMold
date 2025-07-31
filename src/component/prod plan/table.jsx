@@ -23,7 +23,7 @@ const PlanTable = () => {
 
                 const result = await response.json();
                 console.log('✅ Fetched Plans:', result);
-                setPlans(result);
+                setPlans(result.data);
             } catch (error) {
                 console.error("❌ Fetch error:", error);
             }
@@ -40,7 +40,6 @@ const PlanTable = () => {
                     <thead className="bg-gray-100">
                         <tr>
                             <th className="px-4 py-2 border text-center">Select</th>
-                            <th className="px-4 py-2 border text-center">Plan Id</th>
                             <th className="px-4 py-2 border text-center">Date</th>
                             <th className="px-4 py-2 border text-center">PS Number</th>
                             <th className="px-4 py-2 border text-center">Target</th>
@@ -70,7 +69,6 @@ const PlanTable = () => {
                                             className="form-radio text-blue-600 h-5 w-5 transition duration-150 ease-in-out cursor-pointer"
                                         />
                                     </td>
-                                    <td className="px-4 py-2 border">{item.plan_id}</td>
                                     <td className="px-4 py-2 border">{item.plan_date}</td>
                                     <td className="px-4 py-2 border">{item.ps_no}</td>
                                     <td className="px-4 py-2 border">{item.target_qty}</td>

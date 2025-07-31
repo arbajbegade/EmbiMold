@@ -8,10 +8,10 @@ const PlanDetails = ({ planType, machineName, posDetail }) => {
 
   const [formData, setFormData] = useState({
     date: today,
-    psNumber: '',
+    ps_no: '',
     target: 0,
-    machine: '',
-    planType: ''
+    machine_name: '',
+    plan_type: ''
   });
 
   const handleChange = (e) => {
@@ -67,8 +67,8 @@ const PlanDetails = ({ planType, machineName, posDetail }) => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">PS Number</label>
               <select
-                name="psNumber"
-                value={formData.psNumber}
+                name="ps_no"
+                value={formData.ps_no}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded px-3 py-2"
                 required
@@ -99,8 +99,8 @@ const PlanDetails = ({ planType, machineName, posDetail }) => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Machine Name</label>
               <select
-                name="machine"
-                value={formData.machine}
+                name="machine_name"
+                value={formData.machine_name}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded px-3 py-2"
                 required
@@ -117,8 +117,8 @@ const PlanDetails = ({ planType, machineName, posDetail }) => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Plan Type</label>
               <select
-                name="planType"
-                value={formData.planType}
+                name="plan_type"
+                value={formData.plan_type}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded px-3 py-2"
                 required
