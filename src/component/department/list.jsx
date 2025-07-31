@@ -96,7 +96,7 @@ const DepartmentList = () => {
           <input
             type="text"
             name="department_name"
-            value={formData.departmentName}
+            value={formData.department_name}
             onChange={handleChange}
             className="w-64 border border-gray-300 rounded px-3 py-2"
             required
