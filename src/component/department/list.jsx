@@ -1,27 +1,32 @@
-import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import secureApiFetch from "../../services/apiFetch";
+import DTable from './table';
 
 const DepartmentList = () => {
   const [formData, setFormData] = useState({ department_name: '' });
   const [departments, setDepartments] = useState([]);
 
-  useEffect(() => {
-    secureApiFetch("/api/v1/departments", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Accept: "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setDepartments(data);
-      })
-      .catch((error) => {
-        console.error("Machine name fetch error:", error);
+  const fetchDepartments = async () => {
+    try {
+      const response = await secureApiFetch("/api/v1/departments", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Accept: "application/json",
+        },
       });
+
+      const data = await response.json();
+      setDepartments(data);
+    } catch (error) {
+      console.error("Department fetch error:", error);
+      toast.error("Failed to fetch department data");
+    }
+  };
+
+  useEffect(() => {
+    fetchDepartments();
   }, []);
 
   const handleChange = (e) => {
@@ -46,7 +51,6 @@ const DepartmentList = () => {
       }
 
       const result = await response.json();
-      console.log("✅ Submitted Data:", result);
       toast.success('Department Name Submitted Successfully!');
     } catch (error) {
       console.error("Submission error:", error);
@@ -69,10 +73,9 @@ const DepartmentList = () => {
         const errorResult = await response.json();
         throw new Error(errorResult.message || "Failed to delete Department");
       }
-
       const result = await response.json();
+      fetchDepartments()
       toast.success("Department Name deleted successfully!");
-
     } catch (error) {
       console.error("Deletion error:", error);
       toast.error(error.message || "Something went wrong while deleting!");
@@ -103,32 +106,7 @@ const DepartmentList = () => {
           Submit
         </button>
       </form>
-
-      {/* Table with dummy data */}
-      <table className="min-w-full border border-gray-300">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="px-4 py-2 border text-center">Id</th>
-            <th className="px-4 py-2 border text-center">Department Name</th>
-            <th className="px-4 py-2 border text-center">Department Type</th>
-            <th className="px-4 py-2 border text-center">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {departments.map((dept, index) => (
-            <tr key={index} className="text-center">
-              <td className="px-4 py-2 border">{dept.department_id}</td>
-              <td className="px-4 py-2 border">{dept.department_name}</td>
-              <td className="px-4 py-2 border">{dept.department_type}</td>
-              <td className="px-4 py-2 border">
-                <button onClick={() => handleDelete(dept.department_id)} className="text-red-600 hover:text-red-700 cursor-pointer">
-                  <DeleteIcon />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <DTable departments={departments} handleDelete={handleDelete} />
     </div>
   );
 };
