@@ -73,33 +73,18 @@ const MoldDetails = () => {
       mqttClient.removeListener("message", handleMessage);
     };
   }, [id]);
+
   return (
     <div className="my-2 w-full h-full p-4 bg-white rounded-md shadow-lg">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-bold mb-4">Machine Name: {id}</h2>
         <div className='flex items-center gap-4'>
-          <p className='flex'> Mold:  {moldStatus === 'OPEN' ? (
-            <span className="text-yellow-600 flex items-center gap-1">
-              <HourglassEmptyIcon fontSize="small" />
-              OPEN
-            </span>
-          ) : (
-            <span className="text-green-600 flex items-center gap-1">
-              <BuildCircleIcon fontSize="small" />
-              CLOSED
-            </span>
-          )}</p>
           <button className='Cbutton' onClick={handleOpen}> <EditIcon /> Change Working Cavity</button>
           <button className='Cbutton' onClick={handleDialogOpen}> <EditIcon /> Edit</button>
         </div>
       </div>
       <div className="flex w-full justify-between gap-4">
-        <div className="w-1/2">
-          <DetailsTable data={allDetails} />
-        </div>
-        <div className="w-1/2">
-          <OeeData data={allDetails.OEE} />
-        </div>
+        <DetailsTable data={allDetails} moldStatus={moldStatus} />
       </div>
 
       <DataChart rejectionHistory={rejectionHistory} prodHistory={prodHistory} />
