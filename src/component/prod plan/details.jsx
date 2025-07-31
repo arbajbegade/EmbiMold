@@ -35,17 +35,13 @@ const PlanDetails = ({ planType, machineName, posDetail }) => {
     if (!response.ok) {
       throw new Error("Failed to submit production plan");
     }
-
     const result = await response.json();
-    console.log("✅ Submitted Data:", result);
     toast.success('Production Plan Submitted Successfully!');
   } catch (error) {
     console.error("❌ Submission error:", error);
     toast.error("Failed to submit production plan");
   }
 };
-
-
   return (
     <div>
       <form onSubmit={handleSubmit}>

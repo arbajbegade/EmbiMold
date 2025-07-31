@@ -16,19 +16,15 @@ const PlanTable = () => {
                         Accept: "application/json"
                     }
                 });
-
                 if (!response.ok) {
                     throw new Error("Failed to fetch production plans");
                 }
-
                 const result = await response.json();
-                console.log('✅ Fetched Plans:', result);
                 setPlans(result.data);
             } catch (error) {
                 console.error("❌ Fetch error:", error);
             }
         };
-
         fetchPlans();
     }, []);
 
@@ -46,20 +42,20 @@ const PlanTable = () => {
                             <th className="px-4 py-2 border text-center">Actual</th>
                             <th className="px-4 py-2 border text-center">Rejected</th>
                             <th className="px-4 py-2 border text-center">Machine Name</th>
-                            <th className="px-4 py-2 border text-center">Status</th>
+                            <th className="px-4 py-2 border text-center">Production State</th>
                             <th className="px-4 py-2 border text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {plans.length === 0 ? (
-                            <tr>
+                            <tr key='no-data'>
                                 <td colSpan="9" className="text-center py-4 text-gray-500">
                                     No production plans available.
                                 </td>
                             </tr>
                         ) : (
-                            plans.map((item) => (
-                                <tr key={item.plan_id} className="text-center">
+                            plans.map((item,index) => (
+                                <tr key={index} className="text-center">
                                     <td className="px-4 py-2 border">
                                         <input
                                             type="radio"
@@ -71,11 +67,11 @@ const PlanTable = () => {
                                     </td>
                                     <td className="px-4 py-2 border">{item.plan_date}</td>
                                     <td className="px-4 py-2 border">{item.ps_no}</td>
-                                    <td className="px-4 py-2 border">{item.target_qty}</td>
+                                    <td className="px-4 py-2 border">{item.target}</td>
                                     <td className="px-4 py-2 border">{item.actual_qty}</td>
                                     <td className="px-4 py-2 border">{item.rejected_qty}</td>
                                     <td className="px-4 py-2 border">{item.machine_name}</td>
-                                    <td className="px-4 py-2 border">{item.production_status}</td>
+                                    <td className="px-4 py-2 border">{item.production_state}</td>
                                     <td className="px-4 py-2 border">
                                         <button
                                             className="text-red-600 hover:text-red-700 cursor-pointer"

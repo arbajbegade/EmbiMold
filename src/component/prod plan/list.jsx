@@ -22,7 +22,7 @@ const PlanList = () => {
           posRes.json()
         ]);
 
-        setPlanType(planData);
+        setPlanType(planData.data);
         setMachineName(machineData);
         setPosDetail(posData);
 
