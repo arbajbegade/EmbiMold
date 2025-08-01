@@ -18,7 +18,7 @@ const DepartmentList = () => {
       });
 
       const data = await response.json();
-      setDepartments(data);
+      setDepartments(data.data);
     } catch (error) {
       console.error("Department fetch error:", error);
       toast.error("Failed to fetch department data");
@@ -59,6 +59,9 @@ const DepartmentList = () => {
   };
 
   const handleDelete = async (departmentId) => {
+    const confirmed = window.confirm("Are you sure you want to delete this department?");
+    if (!confirmed) return;
+
     try {
       const response = await secureApiFetch("/api/v1/departments", {
         method: "DELETE",
@@ -73,6 +76,7 @@ const DepartmentList = () => {
         const errorResult = await response.json();
         throw new Error(errorResult.message || "Failed to delete Department");
       }
+      
       const result = await response.json();
       fetchDepartments()
       toast.success("Department Name deleted successfully!");

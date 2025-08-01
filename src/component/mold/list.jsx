@@ -15,7 +15,7 @@ const MoldList = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        setMoldDetails(data);
+        setMoldDetails(data.data);
         console.log("Mold details fetched successfully:", data);
       })
       .catch((error) => {
