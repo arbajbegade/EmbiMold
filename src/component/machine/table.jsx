@@ -1,10 +1,31 @@
 import React, { useEffect } from 'react'
 import DeleteIcon from '@mui/icons-material/Delete';
+import secureApiFetch from '../../services/apiFetch';
+import toast from 'react-hot-toast';
 
-const MachineTable = ({ machine }) => {
-    const handleDelete = (machineId) => {
-        console.log('Delete machine with ID:', machineId);
-        // Implement delete functionality here
+const MachineTable = ({ machine,fetchMachines }) => {
+     const handleDelete = async (machineId) => {
+        try {
+            const response = await secureApiFetch("/api/v1/machine-details", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json"
+                },
+                body: JSON.stringify({ machine_id: machineId })
+            });
+
+            if (!response.ok) {
+                const errorResult = await response.json();
+                throw new Error(errorResult.message || "Failed to delete Machine");
+            }
+            const result = await response.json();
+            toast.success("Machine deleted successfully!");
+            fetchMachines()
+        } catch (error) {
+            console.error("Deletion error:", error);
+            toast.error(error.message || "Something went wrong while deleting!");
+        }
     };
     return (
         <div>
@@ -24,7 +45,7 @@ const MachineTable = ({ machine }) => {
                             <td className="px-4 py-2 border">{machine.department_id}</td>
                             <td className="px-4 py-2 border">Machine {machine.mt_id}</td>
                             <td className="px-4 py-2 border">
-                            <button onClick={() => handleDelete(dept.department_id)} className="text-red-600 hover:text-red-700 cursor-pointer">
+                            <button onClick={() => handleDelete(machine.machine_id)} className="text-red-600 hover:text-red-700 cursor-pointer">
                                 <DeleteIcon />
                             </button>
                         </td>
