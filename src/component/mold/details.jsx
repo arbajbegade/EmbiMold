@@ -1,17 +1,8 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import MoldTable from './table';
 import secureApiFetch from '../../services/apiFetch';
 
-const MoldDetails = ({moldDetails}) => {
-  const [formData, setFormData] = useState({
-    ps_no: '',
-    loading_time: '',
-    cycle_time: '',
-    cavities: '',
-    no_of_working_cavities: '',
-    mold_temp: '',
-  });
+const MoldDetails = ({fetchMoldDetails,formData,setFormData}) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,7 +26,7 @@ const MoldDetails = ({moldDetails}) => {
       }
 
       const result = await response.json();
-      console.log("✅ Submitted Data:", result);
+      fetchMoldDetails()
       toast.success('Mold details Submitted Successfully!');
     } catch (error) {
       console.error("Submission error:", error);
@@ -74,11 +65,11 @@ const MoldDetails = ({moldDetails}) => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Working Cavities</label>
-              <input type="number" name="no_of_working_cavities" value={formData.no_of_working_cavities} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
+              <input type="number" name="working_cavities" value={formData.working_cavities} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Mold Temp (°C)</label>
-              <input type="number" name="mold_temp" value={formData.mold_temp} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
+              <label className="block text-sm font-medium text-gray-700 mb-1">Temperature (°C)</label>
+              <input type="number" name="temperature" value={formData.temperature} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
             </div>
           </div>
         </div>
@@ -89,8 +80,6 @@ const MoldDetails = ({moldDetails}) => {
           </button>
         </div>
       </form>
-
-      <MoldTable moldDetails={moldDetails}/>
     </div>
   );
 };
