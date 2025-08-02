@@ -19,7 +19,7 @@ const RadialChart = ({ title, percentage, color }) => {
                         fontSize: '14px',
                         fontWeight: 600,
                         offsetY: 0, // Center vertically
-                        formatter: (val) => `${val}%`,
+                        formatter: (val) => `${parseFloat(val).toFixed(2)}%`,
                     },
                 },
             },
