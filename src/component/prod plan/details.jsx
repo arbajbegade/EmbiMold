@@ -3,14 +3,15 @@ import PlanTable from './table';
 import toast from 'react-hot-toast';
 import secureApiFetch from '../../services/apiFetch';
 
-const PlanDetails = ({ planType, machineName, posDetail }) => {
+const PlanDetails = ({ planType, machineName, posDetail, units, department }) => {
   const today = new Date().toISOString().split("T")[0];
-
   const [formData, setFormData] = useState({
-    date: today,
+    plan_date: today,
     ps_no: '',
     target: 0,
     machine_name: '',
+    uom: "",
+    department_name: "",
     plan_type: ''
   });
 
@@ -19,29 +20,29 @@ const PlanDetails = ({ planType, machineName, posDetail }) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    const response = await secureApiFetch("/api/v1/production-plan", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json", // use JSON for structured data
-        Accept: "application/json"
-      },
-      body: JSON.stringify(formData)
-    });
+    try {
+      const response = await secureApiFetch("/api/v1/production-plan", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // use JSON for structured data
+          Accept: "application/json"
+        },
+        body: JSON.stringify(formData)
+      });
 
-    if (!response.ok) {
-      throw new Error("Failed to submit production plan");
+      if (!response.ok) {
+        throw new Error("Failed to submit production plan");
+      }
+      const result = await response.json();
+      toast.success('Production Plan Submitted Successfully!');
+    } catch (error) {
+      console.error("❌ Submission error:", error);
+      toast.error("Failed to submit production plan");
     }
-    const result = await response.json();
-    toast.success('Production Plan Submitted Successfully!');
-  } catch (error) {
-    console.error("❌ Submission error:", error);
-    toast.error("Failed to submit production plan");
-  }
-};
+  };
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -51,9 +52,9 @@ const PlanDetails = ({ planType, machineName, posDetail }) => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
               <input
                 type="date"
-                name="date"
+                name="plan_date"
                 min={today}
-                value={formData.date}
+                value={formData.plan_date}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded px-3 py-2"
                 required
@@ -73,6 +74,24 @@ const PlanDetails = ({ planType, machineName, posDetail }) => {
                 {posDetail.map((item) => (
                   <option key={item.mold_id} value={item.ps_no}>
                     {item.ps_no}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Department Name</label>
+              <select
+                name="department_name"
+                value={formData.department_name}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded px-3 py-2"
+                required
+              >
+                <option value="">Select Department Name</option>
+                {department.map((item) => (
+                  <option key={item.department_id} value={item.department_name}>
+                    {item.department_name}
                   </option>
                 ))}
               </select>
@@ -127,6 +146,23 @@ const PlanDetails = ({ planType, machineName, posDetail }) => {
                 ))}
               </select>
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Units</label>
+              <select
+                name="uom"
+                value={formData.uom}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded px-3 py-2"
+                required
+              >
+                <option value="">Select Unit</option>
+                {units.map((type) => (
+                  <option key={type.uom_id} value={type.uom}>
+                    {type.uom}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 
@@ -136,7 +172,6 @@ const PlanDetails = ({ planType, machineName, posDetail }) => {
           </button>
         </div>
       </form>
-
       <PlanTable />
     </div>
   );
