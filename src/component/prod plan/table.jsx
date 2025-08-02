@@ -1,32 +1,49 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import secureApiFetch from '../../services/apiFetch';
+import toast from 'react-hot-toast';
 
-const PlanTable = () => {
-    const [plans, setPlans] = useState([]);
+const PlanTable = ({ prodData, setFormData }) => {
     const [selectedId, setSelectedId] = useState(null);
 
-    useEffect(() => {
-        const fetchPlans = async () => {
-            try {
-                const response = await secureApiFetch("/api/v1/production-plan", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json"
-                    }
-                });
-                if (!response.ok) {
-                    throw new Error("Failed to fetch production plans");
-                }
-                const result = await response.json();
-                setPlans(result.data);
-            } catch (error) {
-                console.error("❌ Fetch error:", error);
+    const handleRadioChange = (item) => {
+        setSelectedId(item.plan_no);
+        setFormData({
+            plan_date: item.plan_date || "",
+            ps_no: item.ps_no || "",
+            target: item.target || 0,
+            machine_name: item.machine_name || "",
+            uom: item.uom || "",
+            department_name: item.department_name || "",
+            plan_type: item.plan_type || ""
+        });
+    };
+
+    const handleDelete = async (plan_no) => {
+        const confirmed = window.confirm("Are you sure you want to delete this Production Plan?");
+        if (!confirmed) return;
+        try {
+            const response = await secureApiFetch("/api/v1/production-plan", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json"
+                },
+                body: JSON.stringify({ plan_no: plan_no })
+            });
+
+            if (!response.ok) {
+                const errorResult = await response.json();
+                throw new Error(errorResult.message || "Failed to delete Production Plan");
             }
-        };
-        fetchPlans();
-    }, []);
+            const result = await response.json();
+            toast.success("Production Plan deleted successfully!");
+            fetchPlans()
+        } catch (error) {
+            console.error("Deletion error:", error);
+            toast.error(error.message || "Something went wrong while deleting!");
+        }
+    };
 
     return (
         <div className="mt-10">
@@ -35,47 +52,46 @@ const PlanTable = () => {
                 <table className="min-w-full border border-gray-300">
                     <thead className="bg-gray-100">
                         <tr>
+                            <th className="px-4 py-2 border text-center">Sr No.</th>
                             <th className="px-4 py-2 border text-center">Select</th>
                             <th className="px-4 py-2 border text-center">Date</th>
                             <th className="px-4 py-2 border text-center">PS Number</th>
                             <th className="px-4 py-2 border text-center">Target</th>
-                            <th className="px-4 py-2 border text-center">Actual</th>
-                            <th className="px-4 py-2 border text-center">Rejected</th>
                             <th className="px-4 py-2 border text-center">Machine Name</th>
                             <th className="px-4 py-2 border text-center">Production State</th>
                             <th className="px-4 py-2 border text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {plans.length === 0 ? (
+                        {prodData.length === 0 ? (
                             <tr key='no-data'>
                                 <td colSpan="9" className="text-center py-4 text-gray-500">
                                     No production plans available.
                                 </td>
                             </tr>
                         ) : (
-                            plans.map((item,index) => (
+                            prodData.map((item, index) => (
                                 <tr key={index} className="text-center">
+                                    <td className="px-1 py-2 border"> {index + 1} </td>
                                     <td className="px-4 py-2 border">
                                         <input
                                             type="radio"
                                             name="selectedRow"
-                                            checked={selectedId === item.plan_id}
-                                            onChange={() => setSelectedId(item.plan_id)}
+                                            checked={selectedId === item.plan_no}
+                                            onChange={() => handleRadioChange(item)}
                                             className="form-radio text-blue-600 h-5 w-5 transition duration-150 ease-in-out cursor-pointer"
                                         />
+
                                     </td>
                                     <td className="px-4 py-2 border">{item.plan_date}</td>
                                     <td className="px-4 py-2 border">{item.ps_no}</td>
                                     <td className="px-4 py-2 border">{item.target}</td>
-                                    <td className="px-4 py-2 border">{item.actual_qty}</td>
-                                    <td className="px-4 py-2 border">{item.rejected_qty}</td>
                                     <td className="px-4 py-2 border">{item.machine_name}</td>
                                     <td className="px-4 py-2 border">{item.production_state}</td>
                                     <td className="px-4 py-2 border">
                                         <button
                                             className="text-red-600 hover:text-red-700 cursor-pointer"
-                                            onClick={() => console.log("Delete plan", item.plan_id)}
+                                            onClick={() => handleDelete(item.plan_no)}
                                         >
                                             <DeleteIcon />
                                         </button>

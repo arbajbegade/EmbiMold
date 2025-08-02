@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PlanTable from './table';
 import toast from 'react-hot-toast';
 import secureApiFetch from '../../services/apiFetch';
 
 const PlanDetails = ({ planType, machineName, posDetail, units, department }) => {
   const today = new Date().toISOString().split("T")[0];
+  const [prodData, setProdData] = useState([]);
   const [formData, setFormData] = useState({
     plan_date: today,
     ps_no: '',
@@ -14,6 +15,28 @@ const PlanDetails = ({ planType, machineName, posDetail, units, department }) =>
     department_name: "",
     plan_type: ''
   });
+
+  const fetchPlans = async () => {
+    try {
+      const response = await secureApiFetch("/api/v1/production-plan", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        }
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch production plans");
+      }
+      const result = await response.json();
+      setProdData(result.data);
+    } catch (error) {
+      console.error("❌ Fetch error:", error);
+    }
+  };
+  useEffect(() => {
+    fetchPlans();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,6 +61,7 @@ const PlanDetails = ({ planType, machineName, posDetail, units, department }) =>
       }
       const result = await response.json();
       toast.success('Production Plan Submitted Successfully!');
+      fetchPlans()
     } catch (error) {
       console.error("❌ Submission error:", error);
       toast.error("Failed to submit production plan");
@@ -172,7 +196,7 @@ const PlanDetails = ({ planType, machineName, posDetail, units, department }) =>
           </button>
         </div>
       </form>
-      <PlanTable />
+      <PlanTable setFormData={setFormData} prodData={prodData} />
     </div>
   );
 };
