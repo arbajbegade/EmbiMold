@@ -7,6 +7,7 @@ import BoltIcon from '@mui/icons-material/Bolt';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import RestrictedComponent from '../../../permissions/RestrictedComponent';
 
 const DetailsTable = ({ data, moldStatus }) => {
   if (!data || Object.keys(data).length === 0) return <p className="text-red-500">No data available</p>;
@@ -132,7 +133,9 @@ const DetailsTable = ({ data, moldStatus }) => {
         </div>
 
         <div>
-          <OeeData data={data?.OEE || {}} />
+          <RestrictedComponent roles={['embedsol']}>
+            <OeeData data={data?.OEE || {}} />
+          </RestrictedComponent>
         </div>
       </div>
     </div>
