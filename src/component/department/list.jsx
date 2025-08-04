@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import secureApiFetch from "../../services/apiFetch";
 import DTable from './table';
+import RestrictedComponent from '../../permissions/RestrictedComponent';
 
 const DepartmentList = () => {
   const [formData, setFormData] = useState({ department_name: '' });
@@ -76,7 +77,7 @@ const DepartmentList = () => {
         const errorResult = await response.json();
         throw new Error(errorResult.message || "Failed to delete Department");
       }
-      
+
       const result = await response.json();
       fetchDepartments()
       toast.success("Department Name deleted successfully!");
@@ -92,24 +93,26 @@ const DepartmentList = () => {
       <h2 className="text-lg font-semibold mb-6">Department Details</h2>
 
       {/* Input and button in one row */}
-      <form onSubmit={handleSubmit} className="flex items-center gap-4 mb-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Department Name
-          </label>
-          <input
-            type="text"
-            name="department_name"
-            value={formData.department_name}
-            onChange={handleChange}
-            className="w-64 border border-gray-300 rounded px-3 py-2"
-            required
-          />
-        </div>
-        <button type="submit" className="Cbutton mt-6">
-          Submit
-        </button>
-      </form>
+      <RestrictedComponent roles={['embedsol']}>
+        <form onSubmit={handleSubmit} className="flex items-center gap-4 mb-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Department Name
+            </label>
+            <input
+              type="text"
+              name="department_name"
+              value={formData.department_name}
+              onChange={handleChange}
+              className="w-64 border border-gray-300 rounded px-3 py-2"
+              required
+            />
+          </div>
+          <button type="submit" className="Cbutton mt-6">
+            Submit
+          </button>
+        </form>
+      </RestrictedComponent>
       <DTable departments={departments} handleDelete={handleDelete} />
     </div>
   );
