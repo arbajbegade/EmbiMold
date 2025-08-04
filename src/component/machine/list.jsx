@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import MachineTable from './table';
 import MachineDetails from './details';
 import secureApiFetch from '../../services/apiFetch';
+import RestrictedComponent from '../../permissions/RestrictedComponent';
 
 const MachineList = () => {
   const [machine, setMachine] = useState([]);
@@ -88,7 +89,9 @@ const MachineList = () => {
   return (
     <div className="my-2 pt-4 w-full h-full p-4 bg-white rounded-md shadow-lg">
       <h2 className="text-lg font-semibold mb-6">Machine Details</h2>
-      <MachineDetails departments={departments} machineTypes={machineTypes} machineModes={machineModes} />
+      <RestrictedComponent roles={['embedsol']}>
+        <MachineDetails departments={departments} machineTypes={machineTypes} machineModes={machineModes} />
+      </RestrictedComponent>
       <MachineTable machine={machine} fetchMachines={fetchMachines} />
     </div>
   );
