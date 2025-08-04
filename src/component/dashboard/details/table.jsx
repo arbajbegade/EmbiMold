@@ -50,7 +50,7 @@ const DetailsTable = ({ data, moldStatus }) => {
       </div>
 
       <div className="md:w-1/2 w-full flex flex-col justify-between p-4 border border-gray-200 rounded-lg shadow-lg bg-white space-y-4">
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4 text-sm font-medium">
           <div className="flex items-center gap-2 text-sm font-medium">
             <span className="text-gray-700">Mold:</span>
             {moldStatus === 'OPEN' ? (
@@ -128,8 +128,6 @@ const DetailsTable = ({ data, moldStatus }) => {
           ) : (
             <div className="text-sm text-gray-500 italic">Status: Not Available</div>
           )}
-
-
         </div>
 
         <div>

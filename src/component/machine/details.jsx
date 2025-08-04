@@ -6,7 +6,7 @@ import secureApiFetch from '../../services/apiFetch';
 
 const MachineDetails = ({ departments, machineTypes, machineModes }) => {
   const [formData, setFormData] = useState({
-    department: '',
+    department_id: '',
     wm_id: 0,
     machine_name: '',
     mt_id: 0,
@@ -69,15 +69,17 @@ const MachineDetails = ({ departments, machineTypes, machineModes }) => {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Department Name</label>
             <select
-              name="department"
-              value={formData.department}
-              onChange={handleChange}
+              name="department_id"
+              value={formData.department_id}
+              onChange={(e) =>
+                setFormData({ ...formData, department_id: parseInt(e.target.value) })
+              }
               className="w-full border border-gray-300 rounded px-3 py-2"
               required
             >
               <option value="">Select Department</option>
               {departments.map((dept) => (
-                <option key={dept.department_id} value={dept.department_name}>
+                <option key={dept.department_id} value={dept.department_id}>
                   {dept.department_name}
                 </option>
               ))}
